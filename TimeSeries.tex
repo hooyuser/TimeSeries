@@ -1,0 +1,231 @@
+\documentclass{report}
+% Comment the following line to NOT allow the usage of umlauts
+\usepackage[utf8]{inputenc}
+% Uncomment the following line to allow the usage of graphics (.png, .jpg)
+\usepackage{geometry}
+\geometry{left=3cm,right=3cm,top=3cm,bottom=3cm}
+
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[colorlinks,linkcolor=NavyBlue,anchorcolor=red,citecolor=green]{hyperref}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{bm}
+\usepackage{array,makecell}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{upgreek}
+\usepackage{amsmath,amsfonts}
+%\usepackage[utopia]{mathdesign}
+%\usepackage[charter]{mathdesign}
+%\usepackage{unicode-math}
+%\setmathfont{Latin Modern Math}
+%\setmathfont{TG Termes Math}
+
+\usepackage[thmmarks,amsmath]{ntheorem}
+\usepackage{tikz}
+\theorembodyfont{\upshape}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}{Example}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}{Lemma}[section]
+\theoremstyle{nonumberplain}
+\theoremheaderfont{\itshape}
+\theorembodyfont{\normalfont}
+\theoremsymbol{\\ \rightline{$\square$}}
+\newtheorem{proof}{Proof.}
+
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\X}{\mathbf{X}} 
+\newcommand{\M}{\mathbf{M}} 
+\newcommand{\e}{\mathbf{e}} 
+\newcommand{\0}{\mathbf{0}} 
+\newcommand{\vbe}{\bm{\beta}}   
+\newcommand{\vep}{\bm{\varepsilon}}  
+\newcommand{\vb}{\mathbf{b}} 
+
+% Start the document
+\begin{document}
+	\begin{center}	
+	~\\ 
+	\vspace{6em} 
+	\textsc{\Huge TIME SERIES}	
+	~\\
+	\vspace{2.5em} 
+	{\Large }
+	~\\
+	\vspace{6em}
+	\textsf{Huyi Chen}
+	~\\
+	\vspace{5in}  
+	{\large Latest Update: \today}
+	\end{center}
+
+% Create a new 1st level heading
+\chapter{LINEAR MODELS FOR TIME SERIES}
+\section{Autoregressive Models}
+In this chapter, we also assume $(a_t)$ is a white noise, that is a sequence of i.i.d. random variables with mean $0$ and variance $\sigma_a^2<\infty$. And we only focus on the cases where $(x_t)$ is weakly stationary. The lag-$l$ autocovariance of $(x_t)$ is denoted by
+\[
+\upgamma_\ell=\Cov(x_t,x_{t-\ell})=\rho_{\ell}\Var[x_t] .
+\]
+It is clear that $\upgamma_0=\Var[x_t]$ and $\upgamma_{-\ell}=\upgamma_{\ell}$.
+\subsection{AR(1)}
+\begin{itemize}
+	\item Model
+	\[
+		x_{t}=\phi_0+\phi_1x_{t-1}+a_t,
+	\]
+	\[
+		(1-\phi_1B)(x_{t}-\mu)=a_t.
+	\]
+	$(x_t)$ is weakly stationary if and only if $|\phi_1|<1$.
+	\item $\E[x_t]=\dfrac{\phi_0}{1-\phi_1}$.
+	\item $\Var[x_t]=\dfrac{\sigma_a^2}{1-\phi_1^2}$.
+	\item $\rho_\ell=\phi_1^\ell(\ell\ge 0)$; $\quad\rho_0=1$, $\rho_\ell=\phi_1\rho_{\ell-1}$.
+	\item $\hat{x}_t(1)=\E[x_{t+1}|\mathcal{F}_t]=\phi_0+\phi_1x_{t}$.
+	\item $\Var[x_{t+1}|\mathcal{F}_t]=\sigma_a^2$.
+	\item $\hat{x}_t(2)=\E[x_{t+2}|\mathcal{F}_t]=\phi_0+\phi_1(\phi_0+\phi_1x_{t})$.
+	\item $\Var[x_{t+2}|\mathcal{F}_t]=(\phi_1^2+1)\sigma_a^2$.
+\end{itemize}
+
+\subsection{AR(2)}
+\begin{itemize}
+	\item Model
+	\[
+	x_{t}=\phi_0+\phi_1x_{t-1}+\phi_2x_{t-2}+a_t
+	\]
+	\[
+	(1-\phi_1B-\phi_2B^2)(x_{t}-\mu)=a_t
+	\]
+	\item $\E[x_t]=\dfrac{\phi_0}{1-\phi_1-\phi_2}$
+	\item $\Var[x_t]=\dfrac{(1-\phi_2)\sigma_a^2}{1-\phi_1^2-\phi_2-\phi_2^2+\phi_2^3}$
+	\item $\rho_0=1$, $\rho_1=\dfrac{\phi_1}{1-\phi_2}$, $\rho_\ell=\phi_1\rho_{\ell-1}+\phi_2\rho_{\ell-2}$.
+	\item $\hat{x}_t(1)=\E[x_{t+1}|\mathcal{F}_t]=\phi_0+\phi_1x_{t}+\phi_2x_{t-1}$.
+	\item $\Var[x_{t+1}|\mathcal{F}_t]=\sigma_a^2$.
+	\item $\hat{x}_t(2)=\E[x_{t+2}|\mathcal{F}_t]=\phi_0+\phi_1(\phi_0+\phi_1x_{t}+\phi_2x_{t-1})+\phi_2x_{t}$.
+	\item $\Var[x_{t+2}|\mathcal{F}_t]=(\phi_1^2+1)\sigma_a^2$.
+\end{itemize}
+
+\subsection{AR($p$)}
+\begin{itemize}
+	\item Model
+	\[
+	x_{t}=\phi_0+\phi_1x_{t-1}+\phi_2x_{t-2}+\cdots+\phi_px_{t-p}+a_t
+	\]
+	\[
+	(1-\phi_1B-\phi_2B^2-\cdots-\phi_pB^p)(x_{t}-\mu)=a_t
+	\]
+	If all the roots of this characteristic equation $1-\phi_1z-\phi_2z^2-\cdots-\phi_pz^p=0$ are greater than 1 in modulus, than $(x_t)$ is weakly stationary.
+	\item $\E[x_t]=\dfrac{\phi_0}{1-\phi_1-\phi_2-\cdots-\phi_p}$
+	\item $\rho_0=1$, $\rho_\ell=\phi_1\rho_{\ell-1}+\phi_2\rho_{\ell-2}+\cdots+\phi_p\rho_{\ell-p}$.
+	\item $\hat{x}_t(1)=\E[x_{t+1}|\mathcal{F}_t]=\phi_0+\phi_1x_{t}+\phi_2x_{t-1}+\cdots+\phi_px_{t-p+1}$.
+	\item $\Var[x_{t+1}|\mathcal{F}_t]=\sigma_a^2$.
+	\item $\hat{x}_t(2)=\E[x_{t+2}|\mathcal{F}_t]=\phi_0+\phi_1\hat{x}_t(1)+\phi_2x_{t}+\cdots+\phi_px_{t-p+2}$.
+	\item $\Var[x_{t+2}|\mathcal{F}_t]=(\phi_1^2+1)\sigma_a^2$.
+	\item $\hat{x}_t(\ell)=\E[x_{t+\ell}|\mathcal{F}_t]=\phi_0+\phi_1\hat{x}_t(\ell-1)+\phi_2\hat{x}_t(\ell-2)+\cdots+\phi_p\hat{x}_t(\ell-p)$.
+	\item $\Var[x_{t+\ell}|\mathcal{F}_t]=\phi_1^2\Var[x_{t+\ell-1}|\mathcal{F}_t]+\phi_2^2\Var[x_{t+\ell-2}|\mathcal{F}_t]+\cdots+\phi_p^2\Var[x_{t+\ell-p}|\mathcal{F}_t]$.
+\end{itemize}
+
+\section{Moving Average Models}
+\subsection{MA(1)}
+\begin{itemize}
+	\item Model
+	\[
+	x_{t}=c_0+a_t-\theta_1a_{t-1},
+	\]
+	\[
+	x_{t}-c_0=(1-\theta_1B)a_t.
+	\]
+	\item $\E[x_t]=c_0$.
+	\item $\Var[x_t]=(1+\theta_1^2)\sigma_a^2$.
+	\item $\upgamma_1=-\theta_1\sigma_a^2$, $\upgamma_\ell=0$ for $\ell\ge2$.
+	\item $\rho_0=1$, $\rho_1=\dfrac{-\theta_1}{1+\theta_1^2}$, $\rho_\ell=0$ for $\ell\ge2$.
+	\item $\hat{x}_t(1)=\E[x_{t+1}|\mathcal{F}_t]=c_0-\theta_1a_{t}$.
+	\item $\Var[x_{t+1}|\mathcal{F}_t]=\sigma_a^2$.
+	\item $\hat{x}_t(2)=\E[x_{t+2}|\mathcal{F}_t]=c_0$.
+	\item $\Var[x_{t+2}|\mathcal{F}_t]=(1+\theta_1^2)\sigma_a^2$.
+\end{itemize}
+
+\subsection{MA(2)}
+\begin{itemize}
+	\item Model
+	\[
+	x_{t}=c_0+a_t-\theta_1a_{t-1}-\theta_2a_{t-2},
+	\]
+	\[
+	x_{t}-c_0=(1-\theta_1B-\theta_2B^2)a_t.
+	\]
+	\item $\E[x_t]=c_0$.
+	\item $\Var[x_t]=(1+\theta_1^2+\theta_2^2)\sigma_a^2$.
+	\item $\rho_0=1$, $\rho_1=\dfrac{-\theta_1+\theta_1\theta_2}{1+\theta_1^2+\theta_2^2}$, $\rho_2=\dfrac{-\theta_2}{1+\theta_1^2+\theta_2^2}$, $\rho_\ell=0$ for $\ell\ge3$.
+	\item $\hat{x}_t(1)=\E[x_{t+1}|\mathcal{F}_t]=c_0-\theta_1a_{t}-\theta_2a_{t-1}$.
+	\item $\Var[x_{t+1}|\mathcal{F}_t]=\sigma_a^2$.
+	\item $\hat{x}_t(2)=\E[x_{t+2}|\mathcal{F}_t]=c_0-\theta_2a_{t}$.
+	\item $\Var[x_{t+2}|\mathcal{F}_t]=(1+\theta_1^2)\sigma_a^2$.
+	\item $\hat{x}_t(\ell)=c_0\ (\ell\ge3)$.
+	\item $\Var[x_{t+\ell}|\mathcal{F}_t]=(1+\theta_1^2+\theta_2^2)\sigma_a^2\ (\ell\ge3)$.
+\end{itemize}
+\subsection{MA($q$)}
+\begin{itemize}
+	\item Model
+	\[
+	x_{t}=c_0+a_t-\theta_1a_{t-1}-\theta_2a_{t-2}-\cdots-\theta_qa_{t-q},
+	\]
+	\[
+	x_{t}-c_0=(1-\theta_1B-\theta_2B^2-\cdots-\theta_qB^q)a_t.
+	\]
+	\item $\E[x_t]=c_0$.
+	\item $\Var[x_t]=(1+\theta_1^2+\theta_2^2+\cdots+\theta_q^2)\sigma_a^2$.
+	\item $\upgamma_1=-\theta_1\sigma_a^2$, $\upgamma_\ell=0$ for $\ell\ge2$.
+	\item $\rho_0=1$, $\rho_\ell=\dfrac{-\theta_\ell+\theta_1\theta_{1+\ell}+\theta_{2}\theta_{2+\ell}+\cdots+\theta_{q-\ell}\theta_{q}}{1+\theta_1^2+\theta_2^2+\cdots+\theta_q^2}$ for $1\le\ell\le q$, $\rho_\ell=0$ for $\ell>q$.
+	\item $\hat{x}_t(1)=\E[x_{t+1}|\mathcal{F}_t]=c_0-\theta_1a_{t}-\theta_2a_{t-1}-\cdots-\theta_qa_{t-q+1}$.
+	\item $\Var[x_{t+1}|\mathcal{F}_t]=\sigma_a^2$.
+	\item $\hat{x}_t(2)=\E[x_{t+2}|\mathcal{F}_t]=c_0-\theta_2a_{t}-\cdots-\theta_qa_{t-q+2}$.
+	\item $\Var[x_{t+2}|\mathcal{F}_t]=(1+\theta_1^2)\sigma_a^2$.
+	\item $\hat{x}_t(\ell)=c_0\ (\ell>q)$.
+	\item $\Var[x_{t+\ell}|\mathcal{F}_t]=(1+\theta_1^2+\theta_2^2+\cdots+\theta_q^2)\sigma_a^2\ (\ell>q)$.
+\end{itemize}
+\section{ARMA}
+\subsection{ARMA($p$,$q$)}
+\begin{itemize}
+	\item Model
+	\[
+	x_{t}=\phi_0+\phi_1x_{t-1}+\phi_2x_{t-2}+\cdots+\phi_px_{t-p}+a_t-\theta_1a_{t-1}-\theta_2a_{t-2}-\cdots-\theta_qa_{t-q}
+	\]
+	\[
+	(1-\phi_1B-\phi_2B^2-\cdots-\phi_pB^p)(x_{t}-\mu)=(1-\theta_1B-\theta_2B^2-\cdots-\theta_qB^q)a_t
+	\]
+	\item $\E[x_t]=\dfrac{\phi_0}{1-\phi_1-\phi_2-\cdots-\phi_p}$
+\end{itemize}
+
+\chapter{LINEAR MODELS FOR TIME SERIES}
+\section{GARCH}
+\subsection{ARMA(1,1)-GARCH(1,1)}
+
+\begin{align*}
+&x_t=\phi_0+\phi_1x_{t-1}+a_t-\theta_1a_{t-1}, \\
+& a_t=\sigma_t\epsilon_t\ \;(\epsilon_t\sim N(0,1)),\\
+&  \sigma_t^2=\alpha_0+\alpha_1a_{t-1}^2
++\beta_1\sigma_{t-1}^2
+\end{align*}
+log-likelihood function
+\begin{align*}
+l(a_2,\cdots,a_T;\phi_0,\phi_1,\theta_1,\alpha_0,\alpha_1,\beta_1,a_1,\sigma_1^2)=-\frac{1}{2}\sum_{t=2}^{T}\log(2\pi \sigma_t^2)-\sum_{t=2}^{T}\frac{\hat{a}_t^2}{\sigma_t^2}
+\end{align*}
+where
+\[
+\hat{a}_t=x_t-\phi_0-\phi_1x_{t-1}+\theta_1\hat{a}_{t-1},\quad\hat{a}_{1}=a_1
+\]
+and
+\[
+\sigma_t^2=\alpha_0+\alpha_1\hat{a}_{t-1}^2
++\beta_1\sigma_{t-1}^2.
+\]
+
+
+\end{document}
